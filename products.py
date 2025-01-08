@@ -1,4 +1,4 @@
-class product():
+class Product():
     def __init__(self, name, price, quantity):
         if not isinstance(name, str) or not name:
             raise ValueError("Name must be a non-empty string")
