@@ -44,7 +44,7 @@ def test_product_returns_correct_stock_after_buy():
     assert res == 50
 
 def test_product_turns_negative_after_outta_stock():
-    """Test that product returns correct stock after buy"""
+    """Test that product turns inactive out of stock"""
     p = Product(name="Invalid Product", price=10.00, quantity=10)
     res = p.buy(10)
     assert p.is_active() == False
