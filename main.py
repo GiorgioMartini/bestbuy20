@@ -13,8 +13,6 @@ def show_all_products(store):
         print(f"{i}. {product.name}")
 
 def start(store):
-
-
     while True:
         print("Store Menu")
         print("----------")
@@ -41,7 +39,7 @@ def start(store):
                 
                 product_idx = int(wantedProduct) - 1  # Subtract 1 because indices start at 0
                 quantity = int(wanted_amt)
-                
+              
                 product = store.get_all_products()[product_idx]
                 
                 shopping_list = [(product, quantity)]

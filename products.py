@@ -35,5 +35,9 @@ class Product():
         # Then check if we have enough stock
         if quantity > self.quantity:
             raise ValueError("Not enough quantity in stock")
+        
         self.quantity -= quantity
+        
+        if self.quantity == 0:
+            self.deactivate()
         return quantity * self.price
