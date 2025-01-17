@@ -3,12 +3,13 @@ import store
 import promotions
 
 # setup initial stock of inventory
-product_list = [ products.Product("MacBook Air M2", price=1450, quantity=100),
-                 products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
-                 products.Product("Google Pixel 7", price=500, quantity=250),
-                 products.NonStockedProduct("Windows License", price=125),
-                 products.LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
-               ]
+product_list = [
+  products.Product("MacBook Air M2", price=1450, quantity=100),
+  products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),
+  products.Product("Google Pixel 7", price=500, quantity=250),
+  products.NonStockedProduct("Windows License", price=125),
+  products.LimitedProduct("Shipping", price=10, quantity=250, maximum=1)
+]
 
 # Create promotion catalog
 second_half_price = promotions.SecondHalfPrice("Second Half price!")
@@ -54,7 +55,7 @@ def start(store):
                 
                 product_idx = int(wantedProduct) - 1  # Subtract 1 because indices start at 0
                 quantity = int(wanted_amt)
-              
+                
                 product = store.get_all_products()[product_idx]
                 
                 shopping_list = [(product, quantity)]

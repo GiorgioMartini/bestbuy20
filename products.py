@@ -6,8 +6,8 @@ class Product():
             raise ValueError("Name must be a non-empty string")
         if not isinstance(price, (int, float)) or price <= 0:
             raise ValueError("Price must be a positive number")
-        if not isinstance(quantity, (int, float)) or quantity <= 0:
-            raise ValueError("Quantity must be a positive number")
+        if not isinstance(quantity, (int, float)) or quantity < 0:
+            raise ValueError("Quantity must be a non-negative number")
         self.name = name
         self.price = price 
         self.quantity = quantity
@@ -67,38 +67,34 @@ class Product():
     def set_promotion(self, promotion):
         self.promotion = promotion
 
+
+
+
+
+
 class NonStockedProduct(Product):
     def __init__(self, name, price):
-        if not isinstance(name, str) or not name:
-            raise ValueError("Name must be a non-empty string")
-        if not isinstance(price, (int, float)) or price <= 0:
-            raise ValueError("Price must be a positive number")
+        super().__init__(name, price, 0)
         
-        self.name = name
-        self.price = price 
-        self.active = False
     def buy(self, quantity):
         if not isinstance(quantity, (int, float)) or quantity <= 0:
             raise ValueError("Quantity must be a positive number")
         
         if self._promotion:
-            return self._promotion.apply(self, quantity)
+            return self._promotion.apply_promotion(self, quantity)
         else:
             return quantity * self.price
         
     def show(self):
-        return f"{self.name})"        
+        return f"{self.name})"
+
+
+
+
 
 class LimitedProduct(Product):
-    def __init__(self, name, price, quantity,  maximum):
-        if not isinstance(name, str) or not name:
-            raise ValueError("Name must be a non-empty string")
-        if not isinstance(price, (int, float)) or price <= 0:
-            raise ValueError("Price must be a positive number")
-        
-        self.name = name
-        self.price = price 
-        self.active = False
+    def __init__(self, name, price, quantity, maximum):
+        super().__init__(name, price, quantity)
         self.maximum = maximum
         
     def buy(self, quantity):
@@ -109,6 +105,6 @@ class LimitedProduct(Product):
             raise ValueError("Not enough quantity in stock")
         
     def show(self):
-        return f"{self.name}, Max quantity: {self.maximum})"        
+        return f"{self.name}, Max quantity: {self.maximum})"
       
 
