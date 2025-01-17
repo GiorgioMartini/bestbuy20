@@ -12,7 +12,10 @@ class Store():
         return self.products
 
     def get_total_quantity(self):
-        return len(self.products)
+        total = 0
+        for product in self.products:
+            total += product.get_quantity()
+        return total
 
     def order(self, shopping_list):
         total_price = 0

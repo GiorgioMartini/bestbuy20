@@ -40,7 +40,7 @@ def start(store):
         if user_input == "1":
             show_all_products(store)
         elif user_input == "2":
-            print("Total amount in store: ", store.get_total_quantity())
+            print(f"Total of {store.get_total_quantity()} items in store")
         elif user_input == "3":
             show_all_products(store)
             while True:

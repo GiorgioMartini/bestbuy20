@@ -86,7 +86,7 @@ class NonStockedProduct(Product):
             return quantity * self.price
         
     def show(self):
-        return f"{self.name})"
+        return f"{self.name}"
 
 
 
@@ -100,11 +100,11 @@ class LimitedProduct(Product):
     def buy(self, quantity):
         if not isinstance(quantity, (int, float)) or quantity <= 0:
             raise ValueError("Quantity must be a positive number")
-        
         if quantity > self.maximum:
-            raise ValueError("Not enough quantity in stock")
+            raise ValueError(f"Cannot buy more than {self.maximum} units at a time")
+        return super().buy(quantity)
         
     def show(self):
-        return f"{self.name}, Max quantity: {self.maximum})"
+        return f"{self.name}, Max quantity: {self.maximum}"
       
 
