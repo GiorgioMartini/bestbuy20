@@ -1,3 +1,5 @@
+from promotions import Promotion
+
 class Product():
     def __init__(self, name, price, quantity):
         if not isinstance(name, str) or not name:
@@ -10,6 +12,19 @@ class Product():
         self.price = price 
         self.quantity = quantity
         self.active = False
+        self._promotion = None
+
+    @property
+    def promotion(self):
+        return self._promotion
+    
+    @promotion.setter
+    def promotion(self, promotion):
+        if self._promotion is not None:
+            raise ValueError("Product already has a promotion")
+        if promotion is not None and not isinstance(promotion, Promotion):
+            raise ValueError("Promotion must be of type Promotion")
+        self._promotion = promotion
         
     def get_quantity(self):
         return self.quantity
@@ -27,7 +42,8 @@ class Product():
         self.active = False
     
     def show(self):
-        return f"{self.name} ({self.quantity})"
+        promotion_str = f" {self._promotion}" if self._promotion else ""
+        return f"{self.name} Quantity:{self.quantity}{promotion_str}"
     
     def buy(self, quantity):
         if not isinstance(quantity, (int, float)) or quantity <= 0:
@@ -40,7 +56,16 @@ class Product():
 
         if self.quantity == 0:
             self.deactivate()
-        return quantity * self.price
+
+        if self._promotion:
+            final_price = self._promotion.apply_promotion(self, quantity)
+        else:
+            final_price = quantity * self.price
+            
+        return final_price
+
+    def set_promotion(self, promotion):
+        self.promotion = promotion
 
 class NonStockedProduct(Product):
     def __init__(self, name, price):
@@ -55,6 +80,11 @@ class NonStockedProduct(Product):
     def buy(self, quantity):
         if not isinstance(quantity, (int, float)) or quantity <= 0:
             raise ValueError("Quantity must be a positive number")
+        
+        if self._promotion:
+            return self._promotion.apply(self, quantity)
+        else:
+            return quantity * self.price
         
     def show(self):
         return f"{self.name})"        
