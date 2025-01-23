@@ -65,7 +65,7 @@ class Product():
         return final_price
 
     def set_promotion(self, promotion):
-        self.promotion = promotion
+        self._promotion = promotion
 
 
 

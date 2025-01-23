@@ -24,9 +24,21 @@ product_list[3].set_promotion(thirty_percent)
 best_buy = store.Store(product_list)
 
 def show_all_products(store):
-    print("All products in store:")
+    print("All products in store:\n")
     for i, product in enumerate(store.get_all_products(), 1):
-        print(f"{i}. {product.name}")
+        # Get promotion info
+        promotion = product.promotion
+        promotion_text = promotion.name if promotion else "None"
+        
+        # Handle quantity display based on product type
+        if isinstance(product, products.NonStockedProduct):
+            quantity_text = "Unlimited"
+        elif isinstance(product, products.LimitedProduct):
+            quantity_text = f"Limited to {product.maximum} per order!"
+        else:
+            quantity_text = f"Quantity: {product.quantity}"
+            
+        print(f"{i}. {product.name}, Price: ${product.price}, {quantity_text}, Promotion: {promotion_text}")
 
 def start(store):
     while True:
@@ -35,35 +47,54 @@ def start(store):
         print("1. List all products in store")
         print("2. Show total amount in store")
         print("3. Make an order")
-        print("4. Quit")        
+        print("4. Quit\n")        
         user_input = input("Enter your choice: ")
         if user_input == "1":
             show_all_products(store)
         elif user_input == "2":
-            print(f"Total of {store.get_total_quantity()} items in store")
+            print(f"Total of {store.get_total_quantity()} items in store\n")
         elif user_input == "3":
-            show_all_products(store)
+            shopping_list = []
             while True:
-                wantedProduct = input("Which product # do you want? ")
-                if not wantedProduct.isdigit():
-                    print("Product number must be a number")
+                show_all_products(store)
+                wantedProduct = input("Which product # do you want? (0 to finish)\n")
+                
+                if wantedProduct == "0":
+                    if shopping_list:
+                        total = store.order(shopping_list)
+                        print(f"\nOrder made! Total payment: ${total}\n")
                     break
+                    
+                if not wantedProduct.isdigit():
+                    print("\nProduct number must be a number\n")
+                    continue
+                    
                 wanted_amt = input("What amount do you want? ")
                 if not wanted_amt.isdigit():
-                    print("Amount must be a number") 
-                    break
+                    print("Amount must be a number\n") 
+                    continue
                 
-                product_idx = int(wantedProduct) - 1  # Subtract 1 because indices start at 0
+                product_idx = int(wantedProduct) - 1
                 quantity = int(wanted_amt)
                 
-                product = store.get_all_products()[product_idx]
+                try:
+                    product = store.get_all_products()[product_idx]
+                    # Validate quantity before adding to cart
+                    if quantity > product.quantity:
+                        print(f"Error: {product.name} has only {product.quantity} items in stock\n")
+                        continue
+                    if quantity <= 0:
+                        print("Error: Amount must be greater than 0\n")
+                        continue
+                    
+                    shopping_list.append((product, quantity))
+                    print("Product added to cart!\n")
+                except IndexError:
+                    print("Error: Invalid product number\n")
+                    continue
                 
-                shopping_list = [(product, quantity)]
-                total = store.order(shopping_list)
-                print(f"Order made! Total payment: ${total}")
-                break
         elif user_input == "4":
-            print("Thank you for shopping with us!")
+            print("Thank you for shopping with us!\n")
             break
 
 if __name__ == "__main__":
