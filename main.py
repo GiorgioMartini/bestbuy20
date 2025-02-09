@@ -24,6 +24,13 @@ product_list[3].set_promotion(thirty_percent)
 best_buy = store.Store(product_list)
 
 def show_all_products(store):
+    """
+    Display all products in the store with their details.
+    Lists each product's name, price, quantity status, and any active promotions.
+    Products are numbered starting from 1.
+    Args:
+        store: A Store object containing the products to display
+    """
     print("All products in store:\n")
     for i, product in enumerate(store.get_all_products(), 1):
         # Get promotion info
@@ -54,15 +61,11 @@ def start(store):
         elif user_input == "2":
             print(f"Total of {store.get_total_quantity()} items in store\n")
         elif user_input == "3":
-            shopping_list = []
             while True:
                 show_all_products(store)
                 wantedProduct = input("Which product # do you want? (0 to finish)\n")
                 
                 if wantedProduct == "0":
-                    if shopping_list:
-                        total = store.order(shopping_list)
-                        print(f"\nOrder made! Total payment: ${total}\n")
                     break
                     
                 if not wantedProduct.isdigit():
@@ -79,7 +82,7 @@ def start(store):
                 
                 try:
                     product = store.get_all_products()[product_idx]
-                    # Validate quantity before adding to cart
+                    # Validate quantity before purchase
                     if quantity > product.quantity:
                         print(f"Error: {product.name} has only {product.quantity} items in stock\n")
                         continue
@@ -87,8 +90,11 @@ def start(store):
                         print("Error: Amount must be greater than 0\n")
                         continue
                     
-                    shopping_list.append((product, quantity))
-                    print("Product added to cart!\n")
+                    price = product.buy(quantity)
+                    if price == 0:
+                        print("Error: Product not purchased\n")
+                        continue
+                    print(f"Product purchased! Cost: ${price}\n")
                 except IndexError:
                     print("Error: Invalid product number\n")
                     continue

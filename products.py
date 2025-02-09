@@ -11,7 +11,7 @@ class Product():
         self.name = name
         self.price = price 
         self.quantity = quantity
-        self.active = False
+        self.active = quantity > 0
         self._promotion = None
 
     @property
@@ -101,7 +101,8 @@ class LimitedProduct(Product):
         if not isinstance(quantity, (int, float)) or quantity <= 0:
             raise ValueError("Quantity must be a positive number")
         if quantity > self.maximum:
-            raise ValueError(f"Cannot buy more than {self.maximum} units at a time")
+           print(f"Cannot buy more than {self.maximum} units at a time")
+           return 0
         return super().buy(quantity)
         
     def show(self):

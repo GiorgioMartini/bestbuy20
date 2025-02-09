@@ -1,11 +1,31 @@
 from abc import ABC, abstractmethod
 
 class Promotion(ABC):
+    """
+    Abstract base class for product promotions.
+    
+    This class defines the interface for all promotion types in the store.
+    Each promotion must implement the apply_promotion method to calculate
+    the discounted price based on its specific rules.
+
+    Attributes:
+        name (str): The name of the promotion to display to customers
+    """
     def __init__(self, name):
         self.name = name
 
     @abstractmethod
     def apply_promotion(self, product, quantity):
+        """
+        Calculate the final price after applying the promotion.
+
+        Args:
+            product: The Product object the promotion is being applied to
+            quantity (int): The quantity of items being purchased
+
+        Returns:
+            float: The final price after applying the promotion
+        """
         pass
         
     def __str__(self):
